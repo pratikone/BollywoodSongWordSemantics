@@ -4,6 +4,8 @@
 
 #define SIZE 10
 
+#define DRAW_CORRECTION 5
+
 #define X_SIZE  400
 #define Y_SIZE  300
 
@@ -12,6 +14,7 @@
 
 class LinkedList{
     public:
+        unsigned int index;
         ofRectangle bounds;
         LinkedList *next;
         int offsetX, offsetY;
@@ -47,10 +50,11 @@ class ofApp : public ofBaseApp{
 
 
 
-		ofTrueTypeFont 	copperBlack;
+		ofTrueTypeFont 	copperBlack[SIZE];
 		LinkedList *head;
 
 
 		char words[255][255];
+
 };
 

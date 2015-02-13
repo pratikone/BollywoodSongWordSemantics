@@ -3,10 +3,10 @@
 bool rectOverlap( int lx1, int rx1, int ly1, int ry1, int lx2, int rx2, int ly2, int ry2 ){
 
 
-    if( lx1 > rx2  || lx2 > rx1 )  //left side || right side
+    if( lx1 - DRAW_CORRECTION > rx2  || lx2 - DRAW_CORRECTION  > rx1 )  //left side || right side
         return false;
 
-    if( ly1 > ry2 || ly2 > ry1 ) // below || above   y-cordinate system is opposite of cartesian hence, the comparison operators are flipped
+    if( ly1 - DRAW_CORRECTION > ry2 || ly2 - DRAW_CORRECTION > ry1 ) // below || above   y-cordinate system is opposite of cartesian hence, the comparison operators are flipped
         return false;
 
 
@@ -23,12 +23,14 @@ int getRandY( ){
     return MIN_Y_SIZE + abs(rand() % Y_SIZE-100);
 }
 
-LinkedList*  getMahNode( LinkedList *head, ofRectangle bounds, char *name ){
+LinkedList*  getMahNode( LinkedList *head, ofRectangle bounds, char *name, unsigned int index ){
     LinkedList *node = new LinkedList( bounds );
     int X = getRandX( );
     int Y = getRandY( );
 
     node->name = name;
+
+    node->index = index;
 
     LinkedList *temp;
 
@@ -78,27 +80,46 @@ LinkedList*  getMahNode( LinkedList *head, ofRectangle bounds, char *name ){
 //--------------------------------------------------------------
 void ofApp::setup(){
 
-	copperBlack.loadFont("cooperBlack.ttf", 30);
+
 	ofBackground(50,50,50);  //best background ever
 
 
 
     strcpy(words[0], "Ram");
-    strcpy(words[1], "Lakhan");l
+
+
+    strcpy(words[1], "Lakhan");
+
     strcpy(words[2], "Bulla");
+
+
     strcpy(words[3], "Teja");
+
+
     strcpy(words[4], "Mogambo");
+
+
     strcpy(words[5], "Raka");
+
+
     strcpy(words[6], "Gogo");
+
+
     strcpy(words[7], "Shakaal");
+
+
     strcpy(words[8], "Gabbar");
+
+
     strcpy(words[9], "Dang");
+
 
     head = NULL;  // empty linkedlist
 
 
     for( int i=0; i<SIZE; i++){
-        ofRectangle bounds = copperBlack.getStringBoundingBox(words[i], 0,  0);
+        copperBlack[i].loadFont("cooperBlack.ttf", abs(rand()%32) + 5);
+        ofRectangle bounds = copperBlack[i].getStringBoundingBox(words[i], 0,  0);
 
         cout<<words[i]<<"~~~~~~~~~~~~~~~~~~~"<<endl;
 
@@ -107,7 +128,7 @@ void ofApp::setup(){
 
         if ( head == NULL ){ //base case
 
-            node = getMahNode( head, bounds, words[i] );
+            node = getMahNode( head, bounds, words[i], i );
             head = node;
 
         }
@@ -116,7 +137,7 @@ void ofApp::setup(){
             while( temp->next != NULL )
                 temp = temp->next;
 
-            node = getMahNode( head, bounds, words[i] );
+            node = getMahNode( head, bounds, words[i], i );
             temp->next = node;
 
         }
@@ -148,7 +169,7 @@ void ofApp::draw(){
     //printing mah words here...
     for(LinkedList *temp=head; temp !=NULL;   temp = temp->next ){
         ofSetColor(255,122 + SCALE,220);
-        copperBlack.drawString(temp->name, temp->offsetX,  temp->offsetY );
+        copperBlack[ temp->index ].drawString(temp->name, temp->offsetX,  temp->offsetY );
     }
 
 }
